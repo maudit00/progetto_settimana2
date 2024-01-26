@@ -6,7 +6,6 @@ import it.epicode.entities.Periodicità;
 import it.epicode.entities.Riviste;
 import jakarta.persistence.*;
 
-import java.sql.SQLOutput;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Scanner;
@@ -62,6 +61,9 @@ public class Main {
                 break;
             case "5" :
                 getByAuthor();
+                break;
+            case "6" :
+                getByTitle();
                 break;
         }
     }
@@ -212,6 +214,20 @@ public class Main {
         Query query = em.createNamedQuery("libroPerAutore");
         System.out.println("Inserisci l'autore da cercare");
         query.setParameter("autore", scanner.nextLine());
+        lista = query.getResultList();
+        System.out.println("Il libri sono i seguenti");
+        lista.stream().forEach(elemento -> System.out.println(elemento));
+        closeEM(em,emf);
+        return lista;
+    }
+
+    public static List<ElementiCatalogo> getByTitle (){
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("biblioteca");
+        EntityManager em = emf.createEntityManager();
+        List<ElementiCatalogo> lista;
+        Query query = em.createNamedQuery("elementoPerTitolo");
+        System.out.println("Inserisci il titolo o una parte da cercare");
+        query.setParameter("titolo", scanner.nextLine());
         lista = query.getResultList();
         System.out.println("Il libri sono i seguenti");
         lista.stream().forEach(elemento -> System.out.println(elemento));
