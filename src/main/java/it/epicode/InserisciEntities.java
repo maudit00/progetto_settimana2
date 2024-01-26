@@ -21,12 +21,12 @@ public class InserisciEntities {
         EntityTransaction et = em.getTransaction();
         et.begin();
         u1.setNome("Mario");
-        u1.setCognome("Rossi");
+        u1.setCognome("Verdi");
         em.persist(u1);
 
-        l1.setTitolo("Se questo è un uomo");
+        l1.setTitolo("Il nuovo di bruno vespa");
         em.persist(l1);
-        p1.setDataInizioPrestito(LocalDate.now());
+        p1.setDataInizioPrestito(LocalDate.now().minusDays(31));
         p1.setElemento(l1);
         p1.setUtente(u1);
         em.persist(p1);

@@ -3,6 +3,7 @@ package it.epicode;
 import it.epicode.entities.*;
 import jakarta.persistence.*;
 
+import java.sql.SQLOutput;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Scanner;
@@ -64,6 +65,11 @@ public class Main {
                 break;
             case "7" :
                 getByStatus();
+                break;
+            case "8" :
+                getExpired();
+                break;
+            default :
                 break;
         }
     }
@@ -249,6 +255,18 @@ public class Main {
         return lista.stream().map(elemento -> elemento.getElemento()).toList();
     }
 
+    public static List<Prestiti> getExpired (){
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("biblioteca");
+        EntityManager em = emf.createEntityManager();
+        List<Prestiti> lista;
+        Query query = em.createNamedQuery("prestitiScaduti");
+        query.setParameter("data", LocalDate.now());
+        lista = query.getResultList();
+        System.out.println("Ecco  l'elenco di prestiti scaduti o non restituiti");
+        lista.stream().forEach(el -> System.out.println(el.getId()));
+        closeEM(em,emf);
+        return lista;
+    }
     public static void closeEM(EntityManager em, EntityManagerFactory emf){
         em.close();
         emf.close();

@@ -6,6 +6,7 @@ import java.time.LocalDate;
 
 @Entity
 @Table(name = "prestiti")
+@NamedQuery(name = "prestitiScaduti", query = "SELECT p FROM Prestiti p WHERE p.dataRestituzionePrevista <= :data")
 public class Prestiti {
     @Id
     @GeneratedValue (strategy = GenerationType.AUTO)
