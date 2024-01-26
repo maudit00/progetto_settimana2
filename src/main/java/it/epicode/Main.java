@@ -31,22 +31,27 @@ public class Main {
         String s6 = "6 - Ricerca per titolo o parte di esso";
         String s7 = "7 - Ricerca degli elementi in prestito tramite tessera utente";
         String s8 = "8 - Ricerca prestiti scaduti o non restituiti";
-        String exit = "0";
-        String choice = "";
+        int exit = 0;
+        int choice ;
         List<String> menuMessages =  List.of(s1,s2,s3,s4,s5,s6,s7,s8);
         menuMessages.stream().forEach(message -> System.out.println(message));
             System.out.println("Fai la tua scelta da 1 a 8 e inserisci '0' per uscire dal programma");
-            choice = scanner.nextLine();
-            if (choice.equals(exit)){
+            choice = scanner.nextInt();
+            if (choice == exit){
                 closeEM(em,emf);
                 return;
+            } else if (choice < 0 || choice > 8) {
+                System.out.println("Scelta non presente");
+                menu();
+            } else {
+                menuChoice(choice);
+
             }
-            menuChoice(choice);
     }
 
-    public static void menuChoice(String choosen){
+    public static void menuChoice(int choosen){
         switch  (choosen){
-            case "1" :
+            case 1 :
                 try {
                     add();
                 } catch (Exception e){
@@ -55,7 +60,7 @@ public class Main {
                     menu();
                 }
                 break;
-            case "2" :
+            case 2 :
                 try {
                     remove();
                 } catch (Exception e){
@@ -64,7 +69,7 @@ public class Main {
                 menu();
                 }
                 break;
-            case "3" :
+            case 3 :
                 try {
                     getByISBN();
                 } catch (Exception e){
@@ -73,7 +78,7 @@ public class Main {
                 menu();
                 }
                 break;
-            case "4" :
+            case 4 :
                 try {
                     getByYear();
                 } catch (Exception e){
@@ -82,7 +87,7 @@ public class Main {
                     menu();
                 }
                 break;
-            case "5" :
+            case 5 :
                 try {
                     getByAuthor();
                 } catch (Exception e){
@@ -91,7 +96,7 @@ public class Main {
                     menu();
                 }
                 break;
-            case "6" :
+            case 6 :
                 try {
                     getByTitle();
                 } catch (Exception e){
@@ -100,7 +105,7 @@ public class Main {
                     menu();
                 }
                 break;
-            case "7" :
+            case 7 :
                 try {
                     getByStatus();
                 } catch (Exception e){
@@ -109,7 +114,7 @@ public class Main {
                     menu();
                 }
                 break;
-            case "8" :
+            case 8 :
                 try {
                     getExpired();
                 } catch (Exception e){
@@ -117,10 +122,6 @@ public class Main {
                 } finally {
                     menu();
                 }
-                break;
-            default :
-                System.out.println("Scelta non contemplata");
-                menu();
                 break;
         }
     }
