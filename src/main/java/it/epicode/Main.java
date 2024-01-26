@@ -1,17 +1,29 @@
 package it.epicode;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.Persistence;
+
+import java.util.List;
+
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
-    public static void main(String[] args) {
-        //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
-        // to see how IntelliJ IDEA suggests fixing it.
-        System.out.printf("Hello and welcome!");
+    final static EntityManagerFactory emf = Persistence.createEntityManagerFactory("biblioteca");
+    final static EntityManager em = emf.createEntityManager();
 
-        for (int i = 1; i <= 5; i++) {
-            //TIP Press <shortcut actionId="Debug"/> to start debugging your code. We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/> breakpoint
-            // for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.
-            System.out.println("i = " + i);
-        }
+    public static void main(String[] args) {
+        System.out.println("Benvenuto nel sistema gestione Biblioteca");
+        String s1 = "1 - Aggiunta di un elemento del Catalogo";
+        String s2 = "2 - Rimozione di un elemento del Catalogo da ISBN";
+        String s3 = "3 - Ricerca ISBN";
+        String s4 = "4 - Ricerca per anno pubblicazione";
+        String s5 = "5 - Ricerca per autore";
+        String s6 = "6 - Ricerca per titolo o parte di esso";
+        String s7 = "7 - Ricerca degli elementi in prestito tramite tessera utente";
+        String s8 = "8 - Ricerca prestiti scaduti o non restituiti";
+        
+        List<String> menuMessages =  List.of(s1,s2,s3,s4,s5,s6,s7,s8);
     }
 }

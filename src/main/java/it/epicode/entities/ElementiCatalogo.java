@@ -7,7 +7,7 @@ import java.time.LocalDate;
 @Entity
 @Table (name = "elementi_catalogo")
 @Inheritance ( strategy = InheritanceType.TABLE_PER_CLASS)
-public  class ElementiCatalogo {
+public class ElementiCatalogo {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
