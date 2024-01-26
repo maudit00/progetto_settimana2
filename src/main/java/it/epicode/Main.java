@@ -14,8 +14,6 @@ import java.util.Scanner;
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
-    final static EntityManagerFactory emf = Persistence.createEntityManagerFactory("biblioteca");
-    final static EntityManager em = emf.createEntityManager();
     static Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args) {
@@ -56,10 +54,15 @@ public class Main {
             case "2" :
                 remove();
                 break;
+            case "3" :
+               getByISBN ();
+                break;
         }
     }
 
     public static void add(){
+         EntityManagerFactory emf = Persistence.createEntityManagerFactory("biblioteca");
+         EntityManager em = emf.createEntityManager();
         int choice = 0;
         EntityTransaction et = em.getTransaction();
         System.out.println("Scegli che tipo di elemento inserire: 1 - Libro , 2 - Rivista");
@@ -144,9 +147,13 @@ public class Main {
     }
 
     public static ElementiCatalogo getById (long id){
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("biblioteca");
+        EntityManager em = emf.createEntityManager();
         return em.find(ElementiCatalogo.class, id) ;
     }
     public static void remove(){
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("biblioteca");
+        EntityManager em = emf.createEntityManager();
         System.out.println("Inserisci il codice ISBN dell'elemento da rimuovere");
         long id = scanner.nextLong();
         EntityTransaction et = em.getTransaction();
@@ -162,6 +169,19 @@ public class Main {
        em.close();
        emf.close();
         }
+    }
+
+    public static ElementiCatalogo getByISBN (){
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("biblioteca");
+        EntityManager em = emf.createEntityManager();
+        ElementiCatalogo e;
+        Query query = em.createNamedQuery("elementoPerISBN");
+        System.out.println("Inserisci l'isbn da cercare");
+        query.setParameter("isbn", scanner.nextLong());
+        e = (ElementiCatalogo) query.getSingleResult();
+        System.out.println("Il libro è il seguente");
+        System.out.println(e);
+        return e;
     }
 
 }

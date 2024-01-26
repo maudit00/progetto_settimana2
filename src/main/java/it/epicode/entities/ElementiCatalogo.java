@@ -7,11 +7,12 @@ import java.time.LocalDate;
 @Entity
 @Table (name = "elementi_catalogo")
 @Inheritance ( strategy = InheritanceType.TABLE_PER_CLASS)
+@NamedQuery(name = "elementoPerISBN", query="SELECT e FROM ElementiCatalogo e WHERE e.isbn = :isbn")
 public class ElementiCatalogo {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long ISBN;
+    private long isbn;
     private String titolo;
     @Column(name = "anno_pubblicazione")
     private LocalDate annoPubblicazione;
@@ -22,11 +23,11 @@ public class ElementiCatalogo {
     }
 
     public long getISBN() {
-        return ISBN;
+        return isbn;
     }
 
     public void setISBN(long ISBN) {
-        this.ISBN = ISBN;
+        this.isbn = isbn;
     }
 
     public String getTitolo() {
@@ -53,8 +54,18 @@ public class ElementiCatalogo {
         this.nPagine = nPagine;
     }
 
-    public ElementiCatalogo(long ISBN, String titolo, LocalDate annoPubblicazione, int nPagine) {
-        this.ISBN = ISBN;
+    @Override
+    public String toString() {
+        return
+                "isbn=" + isbn +
+                ", titolo='" + titolo + '\'' +
+                ", annoPubblicazione=" + annoPubblicazione +
+                ", nPagine=" + nPagine
+                ;
+    }
+
+    public ElementiCatalogo(long isbn, String titolo, LocalDate annoPubblicazione, int nPagine) {
+        this.isbn = isbn;
         this.titolo = titolo;
         this.annoPubblicazione = annoPubblicazione;
         this.nPagine = nPagine;
