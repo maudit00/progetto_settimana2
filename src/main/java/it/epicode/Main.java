@@ -53,6 +53,9 @@ public class Main {
             case "1" :
                 add();
                 break;
+            case "2" :
+                remove();
+                break;
         }
     }
 
@@ -138,6 +141,27 @@ public class Main {
                     break;
             }
         return rivista;
+    }
+
+    public static ElementiCatalogo getById (long id){
+        return em.find(ElementiCatalogo.class, id) ;
+    }
+    public static void remove(){
+        System.out.println("Inserisci il codice ISBN dell'elemento da rimuovere");
+        long id = scanner.nextLong();
+        EntityTransaction et = em.getTransaction();
+        try {
+            et.begin();
+            ElementiCatalogo e = getById(id);
+            em.remove(e);
+            et.commit();
+            System.out.println("Elemento con id : " + id + " eliminato con successo");
+        } catch (Exception e ){
+            System.out.println(e);
+        } finally {
+       em.close();
+       emf.close();
+        }
     }
 
 }
