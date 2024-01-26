@@ -1,9 +1,6 @@
 package it.epicode;
 
-import it.epicode.entities.ElementiCatalogo;
-import it.epicode.entities.Libri;
-import it.epicode.entities.Periodicità;
-import it.epicode.entities.Riviste;
+import it.epicode.entities.*;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -64,6 +61,9 @@ public class Main {
                 break;
             case "6" :
                 getByTitle();
+                break;
+            case "7" :
+                getByStatus();
                 break;
         }
     }
@@ -235,8 +235,23 @@ public class Main {
         return lista;
     }
 
+    public static List<ElementiCatalogo> getByStatus (){
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("biblioteca");
+        EntityManager em = emf.createEntityManager();
+        List<Prestiti> lista;
+        Query query = em.createNamedQuery("utentePerTessera");
+        System.out.println("Inserisci il numero della tessera da cercare");
+        query.setParameter("utente", scanner.nextLine());
+        lista = query.getResultList();
+        System.out.println(lista.stream().map(elemento -> elemento.getElemento()).toList());
+
+        closeEM(em,emf);
+        return lista.stream().map(elemento -> elemento.getElemento()).toList();
+    }
+
     public static void closeEM(EntityManager em, EntityManagerFactory emf){
         em.close();
         emf.close();
     }
+
 }
