@@ -13,6 +13,8 @@ import java.util.Scanner;
 public class Main {
     static Scanner scanner = new Scanner(System.in);
 
+    final static EntityManagerFactory emf = Persistence.createEntityManagerFactory("biblioteca");
+    final static EntityManager em = emf.createEntityManager();
     public static void main(String[] args) {
         menu();
     }
@@ -36,6 +38,7 @@ public class Main {
             System.out.println("Fai la tua scelta da 1 a 8 e inserisci '0' per uscire dal programma");
             choice = scanner.nextLine();
             if (choice.equals(exit)){
+                closeEM(em,emf);
                 return;
             }
             menuChoice(choice);
@@ -44,38 +47,85 @@ public class Main {
     public static void menuChoice(String choosen){
         switch  (choosen){
             case "1" :
-                add();
+                try {
+                    add();
+                } catch (Exception e){
+                    System.out.println(e);
+                } finally{
+                    menu();
+                }
                 break;
             case "2" :
-                remove();
+                try {
+                    remove();
+                } catch (Exception e){
+                    System.out.println(e);
+                } finally{
+                menu();
+                }
                 break;
             case "3" :
-               getByISBN();
+                try {
+                    getByISBN();
+                } catch (Exception e){
+                    System.out.println(e);
+                } finally{
+                menu();
+                }
                 break;
             case "4" :
-                getByYear();
+                try {
+                    getByYear();
+                } catch (Exception e){
+                    System.out.println(e);
+                } finally {
+                    menu();
+                }
                 break;
             case "5" :
-                getByAuthor();
+                try {
+                    getByAuthor();
+                } catch (Exception e){
+                    System.out.println(e);
+                } finally {
+                    menu();
+                }
                 break;
             case "6" :
-                getByTitle();
+                try {
+                    getByTitle();
+                } catch (Exception e){
+                    System.out.println(e);
+                } finally {
+                    menu();
+                }
                 break;
             case "7" :
-                getByStatus();
+                try {
+                    getByStatus();
+                } catch (Exception e){
+                    System.out.println(e);
+                } finally {
+                    menu();
+                }
                 break;
             case "8" :
-                getExpired();
+                try {
+                    getExpired();
+                } catch (Exception e){
+                    System.out.println(e);
+                } finally {
+                    menu();
+                }
                 break;
             default :
+                System.out.println("Scelta non contemplata");
                 menu();
                 break;
         }
     }
 
     public static void add(){
-         EntityManagerFactory emf = Persistence.createEntityManagerFactory("biblioteca");
-         EntityManager em = emf.createEntityManager();
         int choice = 0;
         EntityTransaction et = em.getTransaction();
         System.out.println("Scegli che tipo di elemento inserire: 1 - Libro , 2 - Rivista");
@@ -87,11 +137,8 @@ public class Main {
                 em.persist(libro);
                 et.commit();
                 System.out.println("Libro aggiunto con successo");
-            } catch (Exception e){
+            } catch (Exception e) {
                 System.out.println(e);
-            } finally {
-                em.close();
-                emf.close();
             }
         } else if (choice ==2) {
 
@@ -102,11 +149,8 @@ public class Main {
                 et.commit();
             } catch (Exception e){
                 System.out.println(e);
-            } finally {
-                closeEM(em,emf);
             }
         }
-    menu();
     }
 
     public static Libri addBook () {
@@ -156,123 +200,121 @@ public class Main {
         return rivista;
     }
 
-    public static ElementiCatalogo getById (long id){
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("biblioteca");
-        EntityManager em = emf.createEntityManager();
+    public static ElementiCatalogo getById (long id ){
         ElementiCatalogo e = em.find(ElementiCatalogo.class, id) ;
-        closeEM(em,emf);
-        menu();
         return e;
     }
     public static void remove(){
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("biblioteca");
         EntityManager em = emf.createEntityManager();
         System.out.println("Inserisci il codice ISBN dell'elemento da rimuovere");
-        long id = scanner.nextLong();
+        long isbn = scanner.nextLong();
         EntityTransaction et = em.getTransaction();
         try {
             et.begin();
-            ElementiCatalogo e = getById(id);
+            ElementiCatalogo e = getById(isbn);
             em.remove(e);
             et.commit();
-            System.out.println("Elemento con id : " + id + " eliminato con successo");
+            System.out.println("Elemento con ISBN : " + isbn + " eliminato con successo");
         } catch (Exception e ){
-            System.out.println(e);
-        } finally {
-            closeEM(em,emf);
+            e.printStackTrace();
         }
-        menu();
     }
 
     public static ElementiCatalogo getByISBN (){
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("biblioteca");
-        EntityManager em = emf.createEntityManager();
         ElementiCatalogo e;
         Query query = em.createNamedQuery("elementoPerISBN");
         System.out.println("Inserisci l'isbn da cercare");
-        query.setParameter("isbn", scanner.nextLong());
+        long isbn = scanner.nextLong();
+        query.setParameter("isbn", isbn);
         e = (ElementiCatalogo) query.getSingleResult();
-        System.out.println("Il libro è il seguente");
-        System.out.println(e);
-        closeEM(em,emf);
-        menu();
+        if (e.getISBN() == isbn){
+            System.out.println("Il libro è il seguente");
+            System.out.println(e);
+        } else {
+            System.out.println("Libro con ISBN: " + isbn + " non trovato.");
+        }
         return e;
     }
 
     public static List<ElementiCatalogo> getByYear (){
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("biblioteca");
-        EntityManager em = emf.createEntityManager();
         List<ElementiCatalogo> lista;
         Query query = em.createNamedQuery("elementoPerAnno");
         System.out.println("Inserisci l'anno da cercare");
         query.setParameter("anno", scanner.nextLine());
         lista = query.getResultList();
-        System.out.println("Il libri sono i seguenti");
-        lista.stream().forEach(elemento -> System.out.println(elemento));
-        closeEM(em,emf);
-        menu();
+        if (lista.stream().toList().isEmpty()){
+            System.out.println("Non ci sono risultati per l'anno cercato");
+        }
+        else {
+            System.out.println("Il libri sono i seguenti");
+            lista.stream().forEach(elemento -> System.out.println(elemento));
+        }
         return lista;
     }
 
 
     public static List<Libri> getByAuthor (){
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("biblioteca");
-        EntityManager em = emf.createEntityManager();
         List<Libri> lista;
         Query query = em.createNamedQuery("libroPerAutore");
         System.out.println("Inserisci l'autore da cercare");
         query.setParameter("autore", scanner.nextLine());
         lista = query.getResultList();
-        System.out.println("Il libri sono i seguenti");
-        lista.stream().forEach(elemento -> System.out.println(elemento));
-        closeEM(em,emf);
-        menu();
+        if (lista.stream().toList().isEmpty()){
+            System.out.println("Non ci sono risultati per l'autore cercato");
+        }
+        else {
+            System.out.println("Il libri sono i seguenti");
+            lista.stream().forEach(elemento -> System.out.println(elemento));
+        }
         return lista;
     }
 
     public static List<ElementiCatalogo> getByTitle (){
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("biblioteca");
-        EntityManager em = emf.createEntityManager();
         List<ElementiCatalogo> lista;
         Query query = em.createNamedQuery("elementoPerTitolo");
         System.out.println("Inserisci il titolo o una parte da cercare");
         query.setParameter("titolo", scanner.nextLine());
         lista = query.getResultList();
-        System.out.println("Il libri sono i seguenti");
-        lista.stream().forEach(elemento -> System.out.println(elemento));
-        closeEM(em,emf);
-        menu();
+        if (lista.stream().toList().isEmpty()){
+        System.out.println("Non ci sono risultati per il titolo cercato");
+        }
+        else {
+            System.out.println("Il libri sono i seguenti");
+            lista.stream().forEach(elemento -> System.out.println(elemento));
+        }
         return lista;
     }
 
     public static List<ElementiCatalogo> getByStatus (){
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("biblioteca");
-        EntityManager em = emf.createEntityManager();
         List<Prestiti> lista;
-        Query query = em.createNamedQuery("utentePerTessera");
+        Query query = em.createNamedQuery("prestitiPerTessera");
         System.out.println("Inserisci il numero della tessera da cercare");
         query.setParameter("utente", scanner.nextLine());
         lista = query.getResultList();
-        System.out.println(lista.stream().map(elemento -> elemento.getElemento()).toList());
-
-        closeEM(em,emf);
-        menu();
+        if (lista.stream().toList().isEmpty()){
+            System.out.println("Non ci sono risultati per per questo numero Tessera");
+        }
+        else {
+            System.out.println("Il libri sono i seguenti");
+            System.out.println(lista);
+        }
         return lista.stream().map(elemento -> elemento.getElemento()).toList();
     }
 
     public static List<Prestiti> getExpired (){
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("biblioteca");
-        EntityManager em = emf.createEntityManager();
         List<Prestiti> lista;
         Query query = em.createNamedQuery("prestitiScaduti");
         query.setParameter("data", LocalDate.now());
         lista = query.getResultList();
-        System.out.println("Ecco  l'elenco di prestiti scaduti o non restituiti");
-        lista.stream().forEach(el -> System.out.println(el.getId()));
-        closeEM(em,emf);
-        menu();
+        if (lista.stream().toList().isEmpty()){
+            System.out.println("Non ci sono risultati per prestiti scaduti");
+        }
+        else {
+            System.out.println("I prestiti scaduti o non riconsegnati sono i seguenti");
+            System.out.println(lista);
+        }
         return lista;
-
     }
     public static void closeEM(EntityManager em, EntityManagerFactory emf){
         em.close();

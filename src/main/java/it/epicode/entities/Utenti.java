@@ -7,7 +7,7 @@ import java.util.List;
 
 @Entity
 @Table (name ="utenti")
-@NamedQuery( name = "utentePerTessera", query = "SELECT u.prestiti FROM Utenti u WHERE u.numeroTessera = :utente")
+@NamedQuery( name = "prestitiPerTessera", query = "SELECT u.prestiti FROM Utenti u WHERE u.numeroTessera = :utente")
 public class Utenti {
     @Id
     @GeneratedValue ( strategy = GenerationType.AUTO)
@@ -70,7 +70,6 @@ public class Utenti {
                 ", nome='" + nome + '\'' +
                 ", cognome='" + cognome + '\'' +
                 ", dataDiNascita=" + dataDiNascita +
-                ", prestiti=" + prestiti +
                 '}';
     }
 
