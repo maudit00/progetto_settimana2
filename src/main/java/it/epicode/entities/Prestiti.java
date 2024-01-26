@@ -1,11 +1,13 @@
 package it.epicode.entities;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.Check;
 
 import java.time.LocalDate;
 
 @Entity
 @Table(name = "prestiti")
+@Check(constraints = "data_inizio_prestito >= data_restituzione_prevista")
 @NamedQuery(name = "prestitiScaduti", query = "SELECT p FROM Prestiti p WHERE p.dataRestituzionePrevista <= :data")
 public class Prestiti {
     @Id

@@ -33,14 +33,12 @@ public class Main {
         String choice = "";
         List<String> menuMessages =  List.of(s1,s2,s3,s4,s5,s6,s7,s8);
         menuMessages.stream().forEach(message -> System.out.println(message));
-        while (true){
             System.out.println("Fai la tua scelta da 1 a 8 e inserisci '0' per uscire dal programma");
             choice = scanner.nextLine();
             if (choice.equals(exit)){
-                break;
+                return;
             }
             menuChoice(choice);
-        }
     }
 
     public static void menuChoice(String choosen){
@@ -70,6 +68,7 @@ public class Main {
                 getExpired();
                 break;
             default :
+                menu();
                 break;
         }
     }
@@ -107,7 +106,6 @@ public class Main {
                 closeEM(em,emf);
             }
         }
-
     menu();
     }
 
@@ -163,6 +161,7 @@ public class Main {
         EntityManager em = emf.createEntityManager();
         ElementiCatalogo e = em.find(ElementiCatalogo.class, id) ;
         closeEM(em,emf);
+        menu();
         return e;
     }
     public static void remove(){
@@ -182,6 +181,7 @@ public class Main {
         } finally {
             closeEM(em,emf);
         }
+        menu();
     }
 
     public static ElementiCatalogo getByISBN (){
@@ -195,6 +195,7 @@ public class Main {
         System.out.println("Il libro è il seguente");
         System.out.println(e);
         closeEM(em,emf);
+        menu();
         return e;
     }
 
@@ -209,6 +210,7 @@ public class Main {
         System.out.println("Il libri sono i seguenti");
         lista.stream().forEach(elemento -> System.out.println(elemento));
         closeEM(em,emf);
+        menu();
         return lista;
     }
 
@@ -224,6 +226,7 @@ public class Main {
         System.out.println("Il libri sono i seguenti");
         lista.stream().forEach(elemento -> System.out.println(elemento));
         closeEM(em,emf);
+        menu();
         return lista;
     }
 
@@ -238,6 +241,7 @@ public class Main {
         System.out.println("Il libri sono i seguenti");
         lista.stream().forEach(elemento -> System.out.println(elemento));
         closeEM(em,emf);
+        menu();
         return lista;
     }
 
@@ -252,6 +256,7 @@ public class Main {
         System.out.println(lista.stream().map(elemento -> elemento.getElemento()).toList());
 
         closeEM(em,emf);
+        menu();
         return lista.stream().map(elemento -> elemento.getElemento()).toList();
     }
 
@@ -265,7 +270,9 @@ public class Main {
         System.out.println("Ecco  l'elenco di prestiti scaduti o non restituiti");
         lista.stream().forEach(el -> System.out.println(el.getId()));
         closeEM(em,emf);
+        menu();
         return lista;
+
     }
     public static void closeEM(EntityManager em, EntityManagerFactory emf){
         em.close();
