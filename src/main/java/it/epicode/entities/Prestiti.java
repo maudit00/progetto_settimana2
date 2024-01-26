@@ -22,7 +22,7 @@ public class Prestiti {
     @Column (name = "data_inizio_prestito")
     private LocalDate dataInizioPrestito;
     @Column (name = "data_restituzione_prevista")
-    private LocalDate dataRestituzionePrevista = dataInizioPrestito.plusDays(30);
+    private LocalDate dataRestituzionePrevista ;
     @Column (name = "data_restituzione_effettiva")
     private LocalDate dataRestituzioneEffettiva;
 
@@ -34,6 +34,7 @@ public class Prestiti {
         this.utente = utente;
         this.elemento = elemento;
         this.dataInizioPrestito = dataInizioPrestito;
+        this.dataRestituzionePrevista =  dataInizioPrestito.plusDays(30);
         this.dataRestituzioneEffettiva = dataRestituzioneEffettiva;
     }
 
@@ -67,6 +68,7 @@ public class Prestiti {
 
     public void setDataInizioPrestito(LocalDate dataInizioPrestito) {
         this.dataInizioPrestito = dataInizioPrestito;
+        this.dataRestituzionePrevista = dataInizioPrestito.plusDays(30);
     }
 
     public LocalDate getDataRestituzionePrevista() {
