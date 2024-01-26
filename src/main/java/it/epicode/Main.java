@@ -55,7 +55,13 @@ public class Main {
                 remove();
                 break;
             case "3" :
-               getByISBN ();
+               getByISBN();
+                break;
+            case "4" :
+                getByYear();
+                break;
+            case "5" :
+                getByAuthor();
                 break;
         }
     }
@@ -90,8 +96,7 @@ public class Main {
             } catch (Exception e){
                 System.out.println(e);
             } finally {
-                em.close();
-                emf.close();
+                closeEM(em,emf);
             }
         }
 
@@ -110,7 +115,6 @@ public class Main {
         System.out.println("Inserisci l'anno di pubblicazione (YYYY-MM-GG)");
         libro.setAnnoPubblicazione(LocalDate.parse(scanner.nextLine()));
         System.out.println("Inserisci l'autore del libro");
-        scanner.nextLine();
         libro.setAutore(scanner.nextLine());
         System.out.println("Inserisci il genere");
         libro.setGenere(scanner.nextLine());
@@ -149,7 +153,9 @@ public class Main {
     public static ElementiCatalogo getById (long id){
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("biblioteca");
         EntityManager em = emf.createEntityManager();
-        return em.find(ElementiCatalogo.class, id) ;
+        ElementiCatalogo e = em.find(ElementiCatalogo.class, id) ;
+        closeEM(em,emf);
+        return e;
     }
     public static void remove(){
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("biblioteca");
@@ -166,8 +172,7 @@ public class Main {
         } catch (Exception e ){
             System.out.println(e);
         } finally {
-       em.close();
-       emf.close();
+            closeEM(em,emf);
         }
     }
 
@@ -181,7 +186,41 @@ public class Main {
         e = (ElementiCatalogo) query.getSingleResult();
         System.out.println("Il libro è il seguente");
         System.out.println(e);
+        closeEM(em,emf);
         return e;
     }
 
+    public static List<ElementiCatalogo> getByYear (){
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("biblioteca");
+        EntityManager em = emf.createEntityManager();
+        List<ElementiCatalogo> lista;
+        Query query = em.createNamedQuery("elementoPerAnno");
+        System.out.println("Inserisci l'anno da cercare");
+        query.setParameter("anno", scanner.nextLine());
+        lista = query.getResultList();
+        System.out.println("Il libri sono i seguenti");
+        lista.stream().forEach(elemento -> System.out.println(elemento));
+        closeEM(em,emf);
+        return lista;
+    }
+
+
+    public static List<Libri> getByAuthor (){
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("biblioteca");
+        EntityManager em = emf.createEntityManager();
+        List<Libri> lista;
+        Query query = em.createNamedQuery("libroPerAutore");
+        System.out.println("Inserisci l'autore da cercare");
+        query.setParameter("autore", scanner.nextLine());
+        lista = query.getResultList();
+        System.out.println("Il libri sono i seguenti");
+        lista.stream().forEach(elemento -> System.out.println(elemento));
+        closeEM(em,emf);
+        return lista;
+    }
+
+    public static void closeEM(EntityManager em, EntityManagerFactory emf){
+        em.close();
+        emf.close();
+    }
 }

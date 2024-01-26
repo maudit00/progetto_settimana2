@@ -8,6 +8,7 @@ import java.time.LocalDate;
 @Table (name = "elementi_catalogo")
 @Inheritance ( strategy = InheritanceType.TABLE_PER_CLASS)
 @NamedQuery(name = "elementoPerISBN", query="SELECT e FROM ElementiCatalogo e WHERE e.isbn = :isbn")
+//@NamedQuery(name = "elementoPerAnno", query="SELECT e FROM ElementiCatalogo e WHERE EXTRACT(YEAR, e.annoPubblicazione) = :anno")
 public class ElementiCatalogo {
 
     @Id
