@@ -10,7 +10,7 @@ import java.time.LocalDate;
 @NamedQuery(name = "elementoPerISBN", query="SELECT e FROM ElementiCatalogo e WHERE e.isbn = :isbn")
 @NamedQuery(name = "elementoPerAnno", query="SELECT e FROM ElementiCatalogo e WHERE YEAR(e.annoPubblicazione) = :anno")
 @NamedQuery(name = "elementoPerTitolo", query="SELECT e FROM ElementiCatalogo e WHERE UPPER(e.titolo) LIKE UPPER(CONCAT ('%', :titolo,'%'))")
-public class ElementiCatalogo {
+public abstract class ElementiCatalogo {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
